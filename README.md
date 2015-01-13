@@ -25,17 +25,20 @@ Usage
         app:border_color="#EEEEEE"
         app:border_width="5dp"
         app:name="steve jobs"
+        app:background_color="@android:color/white"
+		app:text_color="@android:color/black"
         />
 ```
 You may use the following properties in your XML to customize your DSAvataImageView.
 
 #####Properties:
 
-* `app:border`       (boolean)             -> default true
-* `app:border_color` (color)               -> default GRAY
-* `app:border_width` (dimension)           -> default 2dp
-* `app:name`          (String)             -> default 
-
+* `app:border`              (boolean)           -> default true
+* `app:border_color`        (color)             -> default GRAY
+* `app:border_width`        (dimension)         -> default 2dp
+* `app:name`                (String)            -> default 
+* `app:background_color`    (color)             -> default WHITE
+* `app:text_color`          (color)             -> default GRAY
 ###JAVA (Use Circle avatar image view)
 
 ```java
