@@ -16,6 +16,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.text.TextPaint;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.widget.ImageView;
 
 public class DSAvatarImageView extends ImageView{
@@ -29,6 +30,8 @@ public class DSAvatarImageView extends ImageView{
 	private Paint paintBorder;
 	private TextPaint paintText;
 
+	private int textColor;
+	private int backgroundColor;
 	public DSAvatarImageView(Context context) {
 		this(context,null);
 	}
@@ -46,13 +49,17 @@ public class DSAvatarImageView extends ImageView{
 		paintBorder.setAntiAlias(true);
 
 		paintText=new TextPaint(Paint.ANTI_ALIAS_FLAG);
-
+		textColor=Color.GRAY;
+		backgroundColor=Color.WHITE;
 		TypedArray attributes = context.obtainStyledAttributes(attrs, R.styleable.DSAvatarImageView, defStyle, 0);
 		if(attributes.getBoolean(R.styleable.DSAvatarImageView_border, true)) {
 			int defaultBorderSize = (int) (4 * getContext().getResources().getDisplayMetrics().density + 0.5f);
 			setBorderWidth(attributes.getDimensionPixelOffset(R.styleable.DSAvatarImageView_border_width, defaultBorderSize));
 			setBorderColor(attributes.getColor(R.styleable.DSAvatarImageView_border_color, Color.GRAY));
 			setName(attributes.getString(R.styleable.DSAvatarImageView_name));
+			//setBackgroundColor(attributes.getColor(R.styleable.DSAvatarImageView_background_color,Color.GRAY));
+			setTextColor(attributes.getColor(R.styleable.DSAvatarImageView_text_color, Color.WHITE));
+			//setBackgroundColor(Color.RED);
 		}
 	}
 
@@ -73,7 +80,17 @@ public class DSAvatarImageView extends ImageView{
 			paintBorder.setColor(borderColor);
 		this.invalidate();
 	}
+	public void setBackgroundColor(int bgColor) {
+		this.backgroundColor=bgColor;
+		this.requestLayout();
+		this.invalidate();
+	}
 
+	public void setTextColor(int textColor) {
+		this.textColor = textColor;
+		this.requestLayout();
+		this.invalidate();
+	}
 
 	@Override
 	public void onDraw(Canvas canvas) {
@@ -86,16 +103,18 @@ public class DSAvatarImageView extends ImageView{
 		int circleCenter = (canvasSize - (borderWidth * 2)) / 2;
 
 		canvas.drawCircle(circleCenter + borderWidth, circleCenter + borderWidth, ((canvasSize - (borderWidth * 2)) / 2) + borderWidth - 4.0f, paintBorder);
-
+		paint.setColor(backgroundColor);
 		if (image != null) {
 			BitmapShader shader = new BitmapShader(Bitmap.createScaledBitmap(image, canvasSize, canvasSize, false), Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
 			paint.setShader(shader);
-			canvas.drawCircle(circleCenter + borderWidth, circleCenter + borderWidth, ((canvasSize - (borderWidth * 2)) / 2) - 4.0f, paint);
 		}
+
+		canvas.drawCircle(circleCenter + borderWidth, circleCenter + borderWidth, ((canvasSize - (borderWidth * 2)) / 2) - 4.0f, paint);
+
 
 		if(name!=null){
 			String text=getInitialByName(name);
-			paintText.setColor(Color.WHITE);
+			paintText.setColor(textColor);
 			paintText.setTextSize(Math.max(Math.min(((canvasSize-borderWidth*4)/paint.measureText("AA"))*10, Float.MAX_VALUE), 0));
 			Rect textBound = new Rect();
 			paintText.getTextBounds(text, 0, text.length(), textBound);
