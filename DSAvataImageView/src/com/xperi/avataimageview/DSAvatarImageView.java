@@ -27,6 +27,7 @@ public class DSAvatarImageView extends ImageView{
 	private String name;
 	private Bitmap image;
 	private Paint paint;
+	private Paint paintBackground;
 	private Paint paintBorder;
 	private TextPaint paintText;
 
@@ -48,6 +49,9 @@ public class DSAvatarImageView extends ImageView{
 		paintBorder = new Paint();
 		paintBorder.setAntiAlias(true);
 
+		paintBackground = new Paint();
+		paintBackground.setAntiAlias(true);
+
 		paintText=new TextPaint(Paint.ANTI_ALIAS_FLAG);
 		textColor=Color.GRAY;
 		backgroundColor=Color.WHITE;
@@ -57,9 +61,8 @@ public class DSAvatarImageView extends ImageView{
 			setBorderWidth(attributes.getDimensionPixelOffset(R.styleable.DSAvatarImageView_border_width, defaultBorderSize));
 			setBorderColor(attributes.getColor(R.styleable.DSAvatarImageView_border_color, Color.GRAY));
 			setName(attributes.getString(R.styleable.DSAvatarImageView_name));
-			//setBackgroundColor(attributes.getColor(R.styleable.DSAvatarImageView_background_color,Color.GRAY));
-			setTextColor(attributes.getColor(R.styleable.DSAvatarImageView_text_color, Color.WHITE));
-			//setBackgroundColor(Color.RED);
+			setBackgroundColor(attributes.getColor(R.styleable.DSAvatarImageView_background_color,Color.WHITE));
+			setTextColor(attributes.getColor(R.styleable.DSAvatarImageView_text_color, Color.GRAY));
 		}
 	}
 
@@ -103,13 +106,18 @@ public class DSAvatarImageView extends ImageView{
 		int circleCenter = (canvasSize - (borderWidth * 2)) / 2;
 
 		canvas.drawCircle(circleCenter + borderWidth, circleCenter + borderWidth, ((canvasSize - (borderWidth * 2)) / 2) + borderWidth - 4.0f, paintBorder);
-		paint.setColor(backgroundColor);
+
+
+		paintBackground.setColor(backgroundColor);
+		canvas.drawCircle(circleCenter + borderWidth, circleCenter + borderWidth, ((canvasSize - (borderWidth * 2)) / 2) - 4.0f, paintBackground);
+
 		if (image != null) {
 			BitmapShader shader = new BitmapShader(Bitmap.createScaledBitmap(image, canvasSize, canvasSize, false), Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
 			paint.setShader(shader);
+			canvas.drawCircle(circleCenter + borderWidth, circleCenter + borderWidth, ((canvasSize - (borderWidth * 2)) / 2) - 4.0f, paint);
+
 		}
 
-		canvas.drawCircle(circleCenter + borderWidth, circleCenter + borderWidth, ((canvasSize - (borderWidth * 2)) / 2) - 4.0f, paint);
 
 
 		if(name!=null){
