@@ -29,7 +29,7 @@ public class DSAvatarImageView extends ImageView{
 	private Paint paint;
 	private Paint paintBackground;
 	private Paint paintBorder;
-	private TextPaint paintText;
+	private TextPaint textPaint;
 
 	private int textColor;
 	private int backgroundColor;
@@ -52,7 +52,7 @@ public class DSAvatarImageView extends ImageView{
 		paintBackground = new Paint();
 		paintBackground.setAntiAlias(true);
 
-		paintText=new TextPaint(Paint.ANTI_ALIAS_FLAG);
+		textPaint=new TextPaint(Paint.ANTI_ALIAS_FLAG);
 		textColor=Color.GRAY;
 		backgroundColor=Color.WHITE;
 		TypedArray attributes = context.obtainStyledAttributes(attrs, R.styleable.DSAvatarImageView, defStyle, 0);
@@ -122,14 +122,48 @@ public class DSAvatarImageView extends ImageView{
 
 		if(name!=null){
 			String text=getInitialByName(name);
-			paintText.setColor(textColor);
-			paintText.setTextSize(Math.max(Math.min(((canvasSize-borderWidth*4)/paint.measureText("AA"))*10, Float.MAX_VALUE), 0));
+			textPaint.setColor(textColor);
 			Rect textBound = new Rect();
-			paintText.getTextBounds(text, 0, text.length(), textBound);
-			canvas.drawText(text, circleCenter+borderWidth/2-textBound.width()/2, circleCenter+borderWidth+textBound.height()/2, paintText);
+		    textPaint.setTextSize(getTextSizeToFit(canvasSize-borderWidth*4, canvasSize, text, textPaint));
+		    textPaint.getTextBounds(getTextForSize(text), 0, 2, textBound);
+
+
+			canvas.drawText(text, circleCenter-textBound.width()/2, circleCenter+textBound.height()/2, textPaint);
 		}
 
 	}
+	private String getTextForSize(String input){
+		StringBuffer buffer=new StringBuffer();
+		if(input.length()==1){
+			buffer.append(input);
+			buffer.append(input);
+		}else{
+			buffer.append(input.substring(0, 2));
+		}
+		return buffer.toString();
+	}
+	private float getTextSizeToFit(int maxWidth,int maxHeight,String input,TextPaint textPaint){
+		float textSize = textPaint.getTextSize();
+		String text=getTextForSize(input);
+		if(text.length()==0)
+			return textSize;
+
+
+		Rect textBound = new Rect();
+		textPaint.getTextBounds(text, 0, text.length(), textBound);
+		float width = textBound.width();
+	    float height = textBound.height();
+	    float adjustX = maxWidth / width;
+	    float adjustY = maxHeight / height;
+	    textSize = textSize * (adjustY < adjustX ? adjustY : adjustX);
+
+
+
+		return textSize;
+	}
+
+
+
 
 	@Override
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
