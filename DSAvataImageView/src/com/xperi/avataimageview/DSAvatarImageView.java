@@ -16,7 +16,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.text.TextPaint;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.widget.ImageView;
 
 public class DSAvatarImageView extends ImageView{
@@ -125,7 +124,7 @@ public class DSAvatarImageView extends ImageView{
 			textPaint.setColor(textColor);
 			Rect textBound = new Rect();
 		    textPaint.setTextSize(getTextSizeToFit(canvasSize-borderWidth*4, canvasSize, text, textPaint));
-		    textPaint.getTextBounds(getTextForSize(text), 0, 2, textBound);
+		    textPaint.getTextBounds(getTextForSize(text), 0, text.length(), textBound);
 
 
 			canvas.drawText(text, circleCenter-textBound.width()/2, circleCenter+textBound.height()/2, textPaint);
