@@ -1,7 +1,8 @@
 DSAvataImageView
 ================
-Subclass of ImageView to create a circle avatar image view with user name initial image view.
 [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-DSAvataImageView-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/1483)
+Subclass of ImageView to create a circle avatar image view with user name initial image view.
+
 ![screenshot](https://cloud.githubusercontent.com/assets/7636468/5624104/0bf3d9f8-95a3-11e4-99f3-92afa3fb7efe.png)
 
 Usage
